@@ -3,4 +3,10 @@ project(cpp_aes)
 
 set(CMAKE_CXX_STANDARD 17)
 
-add_executable(cpp_aes main.cpp)
+add_executable(cpp_aes main.cpp
+        encryption.h
+        decryption.h
+        encryption.cpp
+        decryption.cpp
+        lookup_tables.h
+        tests.cpp)
