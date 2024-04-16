@@ -1,7 +1,4 @@
-#include <iostream>
-#include <string>
-
-void runTests();
+#include "functions.h"
 
 int main(int argc, char *argv[]) {
     // FIXME: if you want to run test uncomment the next line

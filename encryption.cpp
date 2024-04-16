@@ -1,5 +1,5 @@
 #include <iostream>
-#include "lookup_tables.h"
+#include "functions.h"
 
 void addRoundKey() {
     std::cout << "hello there" << std::endl;
