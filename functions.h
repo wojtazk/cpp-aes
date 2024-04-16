@@ -16,7 +16,7 @@ void addRoundKey();
 
 void subBytes(uint8_t *state);
 
-void shiftRows();
+void shiftRows(uint8_t *state);
 
 void mixColumns();
 

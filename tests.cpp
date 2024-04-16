@@ -3,36 +3,43 @@
 unsigned int test_num = 1;
 
 void decorator(void (*function)()) {
-    std::cout << "############ test nr " << test_num++ << " ##############" << std::endl;
+    std::cout << "############ test no " << test_num++ << " ##############" << std::endl;
     function();
     std::cout << "#####################################\n\n";
+}
+
+void print_bytes(uint8_t *bytes) {
+    for (int i = 0; i < 16; i++) {
+        std::cout << "0x" << std::hex << int(bytes[i]) << ' ';
+    }
+    std::cout << std::dec << std::endl;
 }
 
 // test subBytes() and invSubBytes()
 void testSubBytes() {
     uint8_t bytes[16] = {0x67, 0x32, 0x25, 0xff, 0x45};
 
-    for (uint8_t byte: bytes) {
-        std::cout << "0x" << std::hex << int(byte) << ' ';
-    }
-    std::cout << std::dec << std::endl;
-
+    print_bytes(bytes);
     subBytes(bytes);
-
-    for (uint8_t byte: bytes) {
-        std::cout << "0x" << std::hex << int(byte) << ' ';
-    }
-    std::cout << std::dec << std::endl;
-
+    print_bytes(bytes);
     invSubBytes(bytes);
+    print_bytes(bytes);
+}
 
-    for (uint8_t byte: bytes) {
-        std::cout << "0x" << std::hex << int(byte) << ' ';
-    }
-    std::cout << std::dec << std::endl;
+// test shiftRows() and invShiftRows()
+void testShiftRows() {
+    uint8_t bytes[16] = {0x00, 0x01, 0x02, 0x03,
+                         0x10, 0x11, 0x12, 0x13,
+                         0x20, 0x21, 0x22, 0x23,
+                         0x30, 0x31, 0x32, 0x33};
+
+    print_bytes(bytes);
+    shiftRows(bytes);
+    print_bytes(bytes);  // expected: 0x00 0x01 0x02 0x03 0x11 0x12 0x13 0x10 0x22 0x23 0x20 0x21 0x33 0x30 0x31 0x32
 }
 
 // combine all tests
 void runTests() {
     decorator(testSubBytes);
+    decorator(testShiftRows);
 }
