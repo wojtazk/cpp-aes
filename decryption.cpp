@@ -33,3 +33,28 @@ void invShiftRows(uint8_t *state) {
     state[14] = state[15];
     state[15] = tmp;
 }
+
+void invMixColumns(uint8_t *state) {
+    uint8_t a[4];
+
+    // d -> unmixed byte, a -> column bytes, ^ -> bit-wise XOR
+    // d0 = 14*a0 ^ 11*a1 ^ 13*a2 ^ 9*a3
+    // d1 = 9*a0  ^ 14*a1 ^ 11*a2 ^ 13*a3
+    // d2 = 13*a0 ^ 9*a1  ^ 14*a2 ^ 11*a3
+    // d3 = 11*a0 ^ 13*a1 ^ 9*a2  ^ 14*a3
+
+    // first column - [0, 4, 8, 12] and so on
+    for (int i = 0; i < 4; i++) {
+        // get current column bytes
+        a[0] = state[i];
+        a[1] = state[i + 4];
+        a[2] = state[i + 8];
+        a[3] = state[i + 12];
+
+        // un-mix bytes
+        state[i] = multiply_by_14[a[0]] ^ multiply_by_11[a[1]] ^ multiply_by_13[a[2]] ^ multiply_by_9[a[3]];
+        state[i + 4] = multiply_by_9[a[0]] ^ multiply_by_14[a[1]] ^ multiply_by_11[a[2]] ^ multiply_by_13[a[3]];
+        state[i + 8] = multiply_by_13[a[0]] ^ multiply_by_9[a[1]] ^ multiply_by_14[a[2]] ^ multiply_by_11[a[3]];
+        state[i + 12] = multiply_by_11[a[0]] ^ multiply_by_13[a[1]] ^ multiply_by_9[a[2]] ^ multiply_by_14[a[3]];
+    }
+}

@@ -41,7 +41,7 @@ void testShiftRows() {
 }
 
 // test mixColumns() and invMixColumns()
-void textMixColumns() {
+void testMixColumns() {
     uint8_t bytes[16] = {0xdb, 0xf2, 0x01, 0xc6,
                          0x13, 0x0a, 0x01, 0xc6,
                          0x53, 0x22, 0x01, 0xc6,
@@ -50,11 +50,13 @@ void textMixColumns() {
     print_bytes(bytes);
     mixColumns(bytes);
     print_bytes(bytes); // expected: 0x8e 0x9f 0x01 0xc6 0x4d 0xdc 0x01 0xc6 0xa1 0x58 0x01 0xc6 0xbc 0x9d 0x01 0xc6
+    invMixColumns(bytes);
+    print_bytes(bytes);
 }
 
 // combine all tests
 void runTests() {
     decorator(testSubBytes);
     decorator(testShiftRows);
-    decorator(textMixColumns);
+    decorator(testMixColumns);
 }

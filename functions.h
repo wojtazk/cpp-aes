@@ -25,6 +25,6 @@ void invSubBytes(uint8_t *state);
 
 void invShiftRows(uint8_t *state);
 
-void invMixColumns();
+void invMixColumns(uint8_t *state);
 
 #endif //CPP_AES_FUNCTIONS_H
