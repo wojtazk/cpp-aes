@@ -1,4 +1,4 @@
-# Advances Encryption Algorithm
+# Advanced Encryption Algorithm
 
 my implementation of AES in C++
 
