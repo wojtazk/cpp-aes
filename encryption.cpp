@@ -38,3 +38,28 @@ void shiftRows(uint8_t *state) {
     state[13] = state[12];
     state[12] = tmp;
 }
+
+void mixColumns(uint8_t *state) {
+    uint8_t a[4];
+
+    // d -> mixed byte, a -> column bytes, ^ -> bit-wise XOR
+    // d0 = 2*a0 ^ 3*a1 ^ 1*a2 ^ 1*a3
+    // d1 = 1*a0 ^ 2*a1 ^ 3*a2 ^ 1*a3
+    // d2 = 1*a0 ^ 1*a1 ^ 2*a2 ^ 3*a3
+    // d3 = 3*a0 ^ 1*a1 ^ 1*a2 ^ 2*a3
+
+    // first column - [0, 4, 8, 12] and so on
+    for (int i = 0; i < 4; i++) {
+        // get current column bytes
+        a[0] = state[i];
+        a[1] = state[i + 4];
+        a[2] = state[i + 8];
+        a[3] = state[i + 12];
+
+        // mix bytes
+        state[i] = multiply_by_2[a[0]] ^ multiply_by_3[a[1]] ^ a[2] ^ a[3];
+        state[i + 4] = a[0] ^ multiply_by_2[a[1]] ^ multiply_by_3[a[2]] ^ a[3];
+        state[i + 8] = a[0] ^ a[1] ^ multiply_by_2[a[2]] ^ multiply_by_3[a[3]];
+        state[i + 12] = multiply_by_3[a[0]] ^ a[1] ^ a[2] ^ multiply_by_2[a[3]];
+    }
+}

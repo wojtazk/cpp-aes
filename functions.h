@@ -18,7 +18,7 @@ void subBytes(uint8_t *state);
 
 void shiftRows(uint8_t *state);
 
-void mixColumns();
+void mixColumns(uint8_t *state);
 
 // decryption functions
 void invSubBytes(uint8_t *state);
