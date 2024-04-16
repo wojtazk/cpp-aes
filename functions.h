@@ -23,7 +23,7 @@ void mixColumns();
 // decryption functions
 void invSubBytes(uint8_t *state);
 
-void invShiftRows();
+void invShiftRows(uint8_t *state);
 
 void invMixColumns();
 
