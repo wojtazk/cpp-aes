@@ -10,7 +10,7 @@ void decorator(void (*function)()) {
 
 void print_bytes(uint8_t *bytes) {
     for (int i = 0; i < 16; i++) {
-        std::cout << "0x" << std::hex << int(bytes[i]) << ' ';
+        std::cout << "" << std::hex << int(bytes[i]) << ' ';
     }
     std::cout << std::dec << std::endl;
 }
@@ -54,9 +54,42 @@ void testMixColumns() {
     print_bytes(bytes);
 }
 
+void testKeyExpansion() {
+    uint8_t key[16] = {0};
+
+    uint8_t expanded_keys[176];
+    keyExpansion(key, expanded_keys);
+
+    for (int i = 0; i < 176; i += 16) {
+        uint8_t bytes[16];
+        for (int j = 0; j < 16; j++) {
+            bytes[j] = expanded_keys[i + j];
+        }
+        print_bytes(bytes);
+    }
+
+    // you can check here if this is correct: https://www.cryptool.org/en/cto/aes-step-by-step
+}
+
+void testAddRoundKey() {
+    uint8_t state[16] = {0b00000001, 0b11111110};
+    uint8_t key[16] = {0b10000001, 0b11111111};
+
+    print_bytes(state);
+    print_bytes(key);
+    addRoundKey(state, key);
+    print_bytes(state);
+    print_bytes(key);
+    addRoundKey(state, key);
+    print_bytes(state);
+    print_bytes(key);
+}
+
 // combine all tests
 void runTests() {
     decorator(testSubBytes);
     decorator(testShiftRows);
     decorator(testMixColumns);
+    decorator(testKeyExpansion);
+    decorator(testAddRoundKey);
 }

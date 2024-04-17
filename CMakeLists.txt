@@ -9,4 +9,5 @@ add_executable(cpp_aes main.cpp
         lookup_tables.h
         tests.cpp
         functions.h
-        lookup_tables.cpp)
+        lookup_tables.cpp
+        key_functions.cpp)

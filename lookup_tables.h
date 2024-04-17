@@ -13,4 +13,6 @@ extern uint8_t multiply_by_11[256];
 extern uint8_t multiply_by_13[256];
 extern uint8_t multiply_by_14[256];
 
+extern uint8_t rcon[16];
+
 #endif //CPP_AES_LOOKUP_TABLES_H

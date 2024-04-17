@@ -11,9 +11,12 @@
 // declare function used for running tests
 void runTests();
 
-// encryption functions
-void addRoundKey();
+// key functions
+void keyExpansion(const uint8_t *input_key, uint8_t *expanded_keys);
 
+void addRoundKey(uint8_t *state, const uint8_t *round_key);
+
+// encryption functions
 void subBytes(uint8_t *state);
 
 void shiftRows(uint8_t *state);
