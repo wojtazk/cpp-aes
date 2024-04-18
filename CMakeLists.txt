@@ -11,3 +11,5 @@ add_executable(cpp_aes main.cpp
         functions.h
         lookup_tables.cpp
         key_functions.cpp)
+
+set(CMAKE_EXE_LINKER_FLAGS "-static-libgcc -static-libstdc++")
