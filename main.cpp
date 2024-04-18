@@ -78,7 +78,16 @@ int main(int argc, char *argv[]) {
         }
     }
 
+
+    // used only for encryption
+    // writes 'odd' bytes and writes additional bytes so the file size is multiple of 16 bytes
     if (i > 0) {
+        // add n bytes with value n at the end
+        // these are added bytes to make file size a multiple of 16 bytes
+        uint8_t added_bytes = 16 - i;
+        for (int j = i; j < 16; j++)
+            state[j] = added_bytes;
+
         transpose(state);
 
         if (encrypt)
