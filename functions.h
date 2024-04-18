@@ -41,4 +41,7 @@ void invShiftRows(uint8_t *state);
 
 void invMixColumns(uint8_t *state);
 
+// AES decryption
+void AES128Decrypt(uint8_t *state, uint8_t *expanded_key);
+
 #endif //CPP_AES_FUNCTIONS_H

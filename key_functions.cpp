@@ -86,15 +86,18 @@ void addRoundKey(uint8_t *state, const uint8_t *round_key) {
 // get the key from user
 void getInputKey(uint8_t *input_key) {
     std::string input_key_str;
-    std::cout << "provide the key: ";
+    std::cout << "provide the key:";
     std::getline(std::cin, input_key_str);
 
     // convert input_key_str to array of 16 bytes
-    int *i = new int;
-    *i = 0;
+    std::cout << "key in HEX: ";
+    int i = 0;
     for (uint8_t ch: input_key_str) {
-        input_key[*i] = ch;
-        (*i)++;
+        input_key[i] = ch;
+        i++;
+
+        // print input key in hex
+        std::cout << std::hex << int(ch) << ' ';
     }
-    delete i;
+    std::cout << std::dec << '\n';
 }

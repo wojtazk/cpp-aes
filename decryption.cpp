@@ -58,3 +58,35 @@ void invMixColumns(uint8_t *state) {
         state[i + 12] = multiply_by_11[a[0]] ^ multiply_by_13[a[1]] ^ multiply_by_9[a[2]] ^ multiply_by_14[a[3]];
     }
 }
+
+// encryption round
+void decryptionRound(uint8_t *state, uint8_t *round_key) {
+    addRoundKey(state, round_key);
+    invMixColumns(state);
+    invShiftRows(state);
+    invSubBytes(state);
+}
+
+// last round of encryption
+void decryptionFirstRound(uint8_t *state, uint8_t *round_key) {
+    addRoundKey(state, round_key);
+    invShiftRows(state);
+    invSubBytes(state);
+}
+
+void AES128Decrypt(uint8_t *state, uint8_t *expanded_key) {
+    // reversed encryption
+
+    // first round
+    decryptionFirstRound(state, expanded_key + 160);
+
+    // 9 rounds
+    for (int i = 9; i >= 1; i--) {
+        decryptionRound(state, expanded_key + (16 * i));
+    }
+
+    // last round
+    addRoundKey(state, expanded_key);
+
+    // state is decrypted
+}

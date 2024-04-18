@@ -119,6 +119,8 @@ void testAES128Encryption() {
     print_bytes(state);
     AES128Encrypt(state, expanded_key);
     print_bytes(state);  // encrypted state
+    AES128Decrypt(state, expanded_key);
+    print_bytes(state);  // decrypted state
 }
 
 // combine all tests
