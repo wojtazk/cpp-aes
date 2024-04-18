@@ -89,15 +89,20 @@ void getInputKey(uint8_t *input_key) {
     std::cout << "provide the key:";
     std::getline(std::cin, input_key_str);
 
-    // convert input_key_str to array of 16 bytes
-    std::cout << "key in HEX: ";
+    // convert input_key_str to array of 16 bytes (only first 16 bytes of input string will be converted)
     int i = 0;
     for (uint8_t ch: input_key_str) {
         input_key[i] = ch;
         i++;
 
-        // print input key in hex
-        std::cout << std::hex << int(ch) << ' ';
+        if (i == 16)
+            break;
+    }
+
+    // print input key in hex
+    std::cout << "key in HEX: ";
+    for (int j = 0; j < 16; j++) {
+        std::cout << std::hex << int(input_key[j]) << ' ';
     }
     std::cout << std::dec << '\n';
 }
