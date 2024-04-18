@@ -59,3 +59,35 @@ void mixColumns(uint8_t *state) {
         state[i + 12] = multiply_by_3[a[0]] ^ a[1] ^ a[2] ^ multiply_by_2[a[3]];
     }
 }
+
+// encryption round
+void encryptionRound(uint8_t *state, uint8_t *round_key) {
+    subBytes(state);
+    shiftRows(state);
+    mixColumns(state);
+    addRoundKey(state, round_key);
+}
+
+// last round of encryption
+void encryptionLastRound(uint8_t *state, uint8_t *round_key) {
+    subBytes(state);
+    shiftRows(state);
+    addRoundKey(state, round_key);
+}
+
+void AES128Encrypt(uint8_t *state, uint8_t *expanded_key) {
+    // 128-bit encryption -> initial round + 10 rounds
+
+    // initial round key addition
+    addRoundKey(state, expanded_key);
+
+    // 9 rounds
+    for (int i = 1; i <= 9; i++) {
+        // shift expanded_key pointer by 16 bytes to the right each round
+        encryptionRound(state, expanded_key + (16 * i));
+    }
+    // last round
+    encryptionLastRound(state, expanded_key + 160);
+
+    // now state is encrypted
+}

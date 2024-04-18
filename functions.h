@@ -12,9 +12,13 @@
 void runTests();
 
 // key functions
+void transpose(uint8_t *array);
+
 void keyExpansion(const uint8_t *input_key, uint8_t *expanded_keys);
 
 void addRoundKey(uint8_t *state, const uint8_t *round_key);
+
+void getInputKey(uint8_t *input_key);
 
 // encryption functions
 void subBytes(uint8_t *state);
@@ -22,6 +26,13 @@ void subBytes(uint8_t *state);
 void shiftRows(uint8_t *state);
 
 void mixColumns(uint8_t *state);
+
+// AES encryption
+void encryptionRound(uint8_t *state, uint8_t *round_key);
+
+void encryptionLastRound(uint8_t *state, uint8_t *round_key);
+
+void AES128Encrypt(uint8_t *state, uint8_t *expanded_key);
 
 // decryption functions
 void invSubBytes(uint8_t *state);

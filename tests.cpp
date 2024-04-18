@@ -11,6 +11,8 @@ void decorator(void (*function)()) {
 void print_bytes(uint8_t *bytes) {
     for (int i = 0; i < 16; i++) {
         std::cout << "" << std::hex << int(bytes[i]) << ' ';
+        if ((i + 1) % 4 == 0)
+            std::cout << '\n';
     }
     std::cout << std::dec << std::endl;
 }
@@ -85,6 +87,40 @@ void testAddRoundKey() {
     print_bytes(key);
 }
 
+void testRound() {
+    uint8_t state[16] = {0x00, 0x03, 0x0f, 0x3f,
+                         0x00, 0x03, 0x0f, 0x3f,
+                         0x01, 0x07, 0x1f, 0x7f,
+                         0x01, 0x07, 0x1f, 0x7f};
+
+    uint8_t key[16] = {0};
+    uint8_t expanded_key[176];
+    keyExpansion(key, expanded_key);
+
+    print_bytes(state);
+    addRoundKey(state, expanded_key);  // initial round key addition
+    print_bytes(state);
+    encryptionRound(state, expanded_key + 16);
+    print_bytes(state);
+
+    std::cout << "used subkey: \n";
+    print_bytes(expanded_key + 16);
+}
+
+void testAES128Encryption() {
+    uint8_t state[16] = {0x00, 0x03, 0x0f, 0x3f,
+                         0x00, 0x03, 0x0f, 0x3f,
+                         0x01, 0x07, 0x1f, 0x7f,
+                         0x01, 0x07, 0x1f, 0x7f};
+    uint8_t key[16] = {0};
+    uint8_t expanded_key[176];
+    keyExpansion(key, expanded_key);
+
+    print_bytes(state);
+    AES128Encrypt(state, expanded_key);
+    print_bytes(state);  // encrypted state
+}
+
 // combine all tests
 void runTests() {
     decorator(testSubBytes);
@@ -92,4 +128,6 @@ void runTests() {
     decorator(testMixColumns);
     decorator(testKeyExpansion);
     decorator(testAddRoundKey);
+    decorator(testRound);
+    decorator(testAES128Encryption);
 }
