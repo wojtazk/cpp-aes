@@ -16,7 +16,7 @@ int main(int argc, char *argv[]) {
     std::string flag = argv[1], input_file_name = argv[2], output_file_name = argv[3];
     //std::cout << flag << ' ' << input_file_name << ' ' << output_file_name << '\n';
 
-// determine if user wants to encrypt or decrypt
+    // determine if user wants to encrypt or decrypt
     bool encrypt = false, decrypt = false;
     if (flag == "-e") {
         encrypt = true;
@@ -55,9 +55,18 @@ int main(int argc, char *argv[]) {
     uint8_t state[16] = {};
 
     int i = 0;
-    while (input_file.read(&byte, 1)) {
+    input_file.read(&byte, 1);
+    while (true) {
         state[i] = byte;
         i++;
+
+        // read next byte
+        input_file.read(&byte, 1);
+
+        // if it is the last byte -> break
+        if (input_file.eof()) {
+            break;
+        }
 
         if (i == 16) {
             transpose(state);
@@ -78,27 +87,48 @@ int main(int argc, char *argv[]) {
         }
     }
 
-
-    // used only for encryption
-    // writes 'odd' bytes and writes additional bytes so the file size is multiple of 16 bytes
+    // writes 'odd' and writes additional bytes so the file size is multiple of 16 bytes
+    // or removes additional bytes in case of decryption
     if (i > 0) {
-        // add n bytes with value n at the end
-        // these are added bytes to make file size a multiple of 16 bytes
-        uint8_t added_bytes = 16 - i;
-        for (int j = i; j < 16; j++)
-            state[j] = added_bytes;
+        if (encrypt) {
+            // add n bytes with value n at the end
+            // these are added bytes to make file size a multiple of 16 bytes
+            uint8_t added_bytes = 16 - i;
+            for (int j = i; j < 16; j++)
+                state[j] = added_bytes;
 
-        transpose(state);
-
-        if (encrypt)
+            transpose(state);
             AES128Encrypt(state, expanded_keys);
-        else if (decrypt)
+            transpose(state);
+
+            for (uint8_t output_byte: state) {
+                output_file << output_byte;
+            }
+
+        } else {
+            transpose(state);
             AES128Decrypt(state, expanded_keys);
+            transpose(state);
 
-        transpose(state);
+            // in case of decryption -> remove added bytes
+            bool has_added_bytes = true;
+            // check for added bytes
+            for (int j = 15; j > 16 - state[15]; j--) {
+                if (state[j] != state[j - 1]) {
+                    has_added_bytes = false;
+                    break;
+                }
+            }
 
-        for (uint8_t output_byte: state) {
-            output_file << output_byte;
+            // in case of decryption 'i' should be 16 at this point
+            if (has_added_bytes) {
+                i -= state[15];  // 16 - (possibly added bytes)
+            }
+
+            // write all bytes except the added ones
+            for (int j = 0; j < i; j++) {
+                output_file << state[j];
+            }
         }
     }
 
